@@ -32,6 +32,19 @@ var gameConnections = {
 
 var validJoinCodes = ['hello']
 
+function makeid(length) {
+  let result = ''
+  const characters = 'abcdefghijklmnopqrstuvwxyz0123456789'
+  const charactersLength = characters.length
+  let counter = 0
+  while (counter < length) {
+    result += characters.charAt(Math.floor(Math.random() * charactersLength))
+    counter += 1
+  }
+  return result
+}
+
+
 app.get('/', (req, res) => {
   console.log('Sending [GET]: Index')
   res.redirect('/join')
@@ -57,11 +70,26 @@ io.on('connection', (socket) => {
       console.log('Accept')
       socket.emit('joinCodeCheck', '{"status": "Accept", "joinCode": "' + code + '"}')
     } else {
-      console.log('Reject')
+      console.log('Reject ' + code)
       socket.emit('joinCodeCheck', '{"status": "Reject"}')
     }
   })
-  console.log('Client Connected')
+
+  socket.on('createGame', () => {
+    var gameId = makeid(6)
+    if (validJoinCodes.includes(gameId)) {
+      gameId = makeid(6)
+      if (validJoinCodes.includes(gameId)) {
+        gameId = makeid(6)
+        if (validJoinCodes.includes(gameId)) {
+          gameId = makeid(6)
+        }
+      }
+    }
+    console.log(gameId)
+    validJoinCodes.push(gameId)
+    socket.emit('gameCreated', '{"gameId": "' + gameId + '"}')
+  })
 })
 
 server.listen(3000, () => {
