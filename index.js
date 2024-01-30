@@ -1,5 +1,3 @@
-//timtamtemtil
-
 const express = require('express')
 const path = require('node:path')
 const bodyParser = require('body-parser');
@@ -15,11 +13,37 @@ app.use(express.json())
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(express.static(path.join(__dirname, 'public')))
 
+/*var validJoinCodes = ['1AG43T']
+var gameConnections = {
+  'gameId': {
+    'ConnectedClients': ['client1', 'client2'],
+    'CurrentQuestion': 'qyestions',
+    'GameStatus': 'Awaiting',
+    'Responses': {
+      'clientName': {
+        'Response': 'response',
+        'ResponseTime': 1
+      }
+    }
+  }
+}*/
+
+var validJoinCodes = []
+
 app.get('/', (req, res) => {
   console.log('Sending [GET]: Index')
-  res.render('index')
+  res.redirect('/join')
 })
 
+app.get('/join', (req, res) => {
+  console.log('Sending [GET]: Join')
+  res.render('join')
+})
+
+app.get('/host', (req, res) => {
+  console.log('Sending [GET]: Host')
+  res.render('host')
+})
 
 app.listen(3000, () => {
   console.log('Dispute started on port 3000.')
