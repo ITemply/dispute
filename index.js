@@ -77,14 +77,8 @@ io.on('connection', (socket) => {
 
   socket.on('createGame', () => {
     var gameId = makeid(6)
-    if (validJoinCodes.includes(gameId)) {
+    while (validJoinCodes.includes(gameId)) {
       gameId = makeid(6)
-      if (validJoinCodes.includes(gameId)) {
-        gameId = makeid(6)
-        if (validJoinCodes.includes(gameId)) {
-          gameId = makeid(6)
-        }
-      }
     }
     console.log(gameId)
     validJoinCodes.push(gameId)
