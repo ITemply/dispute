@@ -4,6 +4,8 @@ const bodyParser = require('body-parser');
 const request = require('request')
 const crypto = require('crypto')
 const app = express()
+const server = require('http').createServer(app);
+const io = require('socket.io')(server);
 const dotenv = require('dotenv')
 dotenv.config()
 
@@ -28,7 +30,7 @@ var gameConnections = {
   }
 }*/
 
-var validJoinCodes = []
+var validJoinCodes = ['hello']
 
 app.get('/', (req, res) => {
   console.log('Sending [GET]: Index')
@@ -45,6 +47,23 @@ app.get('/host', (req, res) => {
   res.render('host')
 })
 
-app.listen(3000, () => {
+app.post('/start-host', (req, res) => {
+  console.log('Sending [POST]: Start-Host')
+})
+
+io.on('connection', (socket) => {
+  socket.on('joinCode', (code) => {
+    if (validJoinCodes.includes(code)) {
+      console.log('Accept')
+      socket.emit('joinCodeCheck', '{"status": "Accept", "joinCode": "' + code + '"}')
+    } else {
+      console.log('Reject')
+      socket.emit('joinCodeCheck', '{"status": "Reject"}')
+    }
+  })
+  console.log('Client Connected')
+})
+
+server.listen(3000, () => {
   console.log('Dispute started on port 3000.')
 })

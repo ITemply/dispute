@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="stylesheets/join.css">
 </head>
 
+<script src="https://cdn.socket.io/4.6.0/socket.io.min.js"></script>
 <script src="js/join.js"></script>
 
 <body>
@@ -13,9 +14,9 @@
         <div class="binding">
             <span class="head-text">Join a Game</span>
             <div class='button-border'>
-                <input class='text-input' type="text" placeholder="Game Code" id="username"> 
+                <input class='text-input' type="text" placeholder="Game Code" id="code" onkeyup="sendJoinCode()"> 
             </div>
-            <span class='error-text'>Error Class</span>
+            <span class='error-text' id="error">Error Class</span>
         </div>
     </div>
 </body>
