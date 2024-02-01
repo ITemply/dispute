@@ -11,12 +11,30 @@
 
 <body>
     <div class="name-enter">
-        <div class="binding">
-            <span class="head-text">Join a Game</span>
-            <div class='button-border'>
+        <div class="top-bar">
+            <span class="top-text">Dispute</span>
+        </div>
+        <div class="user-section" id="user-section">
+            <div class="name-border">
+                <span>You're in! The game will start when the host starts the match.</span>
+            </div>
+        </div>
+    </div>
+    <div class="name-enter" id="name-enter">
+        <div class="binding" id="binding">
+            <span class="head-text" id='headTitle'>Join a Game</span>
+            <div class='button-border' id='bb'>
                 <input class='text-input' type="text" placeholder="Game Code" id="code" onkeyup="sendJoinCode()"> 
+                <input class='text-input-n' type="text" placeholder="Your Game Name" id="name"> 
+                <input class='text-input-b' type="button" value="Join" id="join" onclick="joinGame()"> 
             </div>
             <span class='error-text' id="error">Error Class</span>
+        </div>
+    </div>
+    <div class='enter-bar' id="enter-bar">
+        <div class="button-bar-bottom">
+            <input class='text-input-b-n' type="text" placeholder="Your Opinion Here" id="opinion"> 
+            <input class='text-input-b-b' type="button" value="Submit" id="sendOpinion" onclick="submitOpinion()"> 
         </div>
     </div>
 </body>

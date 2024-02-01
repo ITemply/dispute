@@ -11,10 +11,23 @@
 
 <body>
     <div class="name-enter">
-        <div class="binding">
-            <span class="head-text">Host a Game</span>
+        <div class="top-bar">
+            <span class="top-text">Dispute</span>
+        </div>
+        <center><span class='join-code' id="join-code"></span></center>
+        <div class="user-section" id="user-section">
+        </div>
+        <div class="bottom-bar">
             <div class='button-border'>
-                <input class='text-input' type="button" value="Start Hosting" id="host" onclick='startGame()'> 
+                <input class='text-input' type="button" value="Start Game" id="host" onclick="startGame()"> 
+            </div>
+        </div>
+    </div>
+    <div class="name-enter" id="name-enter">
+        <div class="binding" id="binding">
+            <span class="head-text" id="host-text">Host a Game</span>
+            <div class='button-border' id='m-button'>
+                <input class='text-input' type="button" value="Start Hosting" id="host" onclick='startHost()'> 
             </div>
             <span class='error-text'>Error Class</span>
         </div>
