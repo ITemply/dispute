@@ -53,3 +53,31 @@ socket.on('writerSelected', (writerData) => {
         document.getElementById('host-text').innerHTML = name + ' is the Writer'
     }
 })
+
+socket.on('updateQuestion', (questionData) => {
+    const jsonData = JSON.parse(questionData)
+    var gameId = jsonData.id
+    var question = jsonData.question
+    if (joinCode == gameId) {
+        document.getElementById('host-text').innerHTML = question
+        setTimeout(function() {
+            document.getElementById('host-text').innerHTML = 'Write Your Response | 30'
+            socket.emit('openOpinions', gameId)
+            var timeRemaining = 30
+            var timer = setInterval(() => {
+                timeRemaining = timeRemaining - 1
+                document.getElementById('host-text').innerHTML = 'Write Your Response | ' + timeRemaining
+                if (timeRemaining == 0) {
+                    clearInterval(timer)
+                    document.getElementById('join-code').style.display = 'none'
+                    var usec = document.getElementById('user-section')
+                    usec.innerHTML = ''
+                    setTimeout(function() {
+                        document.getElementById('name-enter').style = 'transform: translateY(-100%); transition: transform 1.75s ease-in-out;'
+                    }, 3000)
+                    socket.emit('timeUp', joinCode)
+                }
+            }, 1000)
+        }, 5500)
+    }
+})

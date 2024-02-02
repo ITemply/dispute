@@ -71,3 +71,38 @@ socket.on('writerSelected', (writerData) => {
         }
     }
 })
+
+socket.on('updateQuestion', (questionData) => {
+    const jsonData = JSON.parse(questionData)
+    var gameId = jsonData.id
+    var question = jsonData.question
+    if (joinCode == gameId) {
+        document.getElementById('headTitle').innerHTML = question
+    }
+})
+
+function submitOpinion() {
+    var question = document.getElementById('opinion').value
+    socket.emit('userWrote', JSON.stringify({id: joinCode, name: name, question: question}))
+    document.getElementById('enter-bar').style = 'transform: translateY(100%); transition: transform 1.75s ease-in-out;'
+    document.getElementById('opinion').placeholder = 'Your Opinion Here'
+    document.getElementById('opinion').value = ''
+}
+
+socket.on('openClientOpinions', (gameId) => {
+    if (joinCode == gameId) {
+        document.getElementById('enter-bar').style = 'transform: translateY(-100%); transition: transform 1.75s ease-in-out;'
+        document.getElementById('opinion').placeholder = 'Your Response Opinion Here'
+    }
+})
+
+socket.on('timesUp', (gameId) => {
+    if (joinCode == gameId) {
+        document.getElementById('enter-bar').style = 'transform: translateY(100%); transition: transform 1.75s ease-in-out;'
+        document.getElementById('opinion').placeholder = 'Your Opinion Here'
+        document.getElementById('opinion').value = ''
+        setTimeout(function() {
+            document.getElementById('name-enter').style = 'transform: translateY(-100%); transition: transform 1.75s ease-in-out;'
+        }, 3000)
+    }
+})

@@ -76,16 +76,42 @@ io.on('connection', (socket) => {
   })
 
   socket.on('startGame', (gameId) => {
-    console.log(gameId)
+    const game = gameConnections[gameId]
+    game['gameStatus'] = 'Starting'
     io.emit('gameStart', JSON.stringify({id: gameId}))
   })
 
   socket.on('selectWriter', (gameId) => {
     const game = gameConnections[gameId]
-    game['gameStatus'] = 'Starting'
+    game['gameStatus'] = 'Writing'
     var gamePlayers = game['gameConnections']
     var name = gamePlayers[Math.floor(Math.random()*gamePlayers.length)];
     io.emit('writerSelected', JSON.stringify({id: gameId, name: name}))
+  })
+
+  socket.on('userWrote', (userWroteData) => {
+    const jsonData = JSON.parse(userWroteData)
+    var gameId = jsonData.id
+    var question = jsonData.question
+    const game = gameConnections[gameId]
+    if (game['gameStatus'] == 'Writing') {
+      var name = jsonData.name
+      game['gameQuestion'] = question
+      game['gameStatus'] = 'Responding'
+      io.emit('updateQuestion', JSON.stringify({id: gameId, question: name + '\'s Opinion: ' + question}))
+    } else if (game['gameStatus'] == 'Responding') {
+      var name = jsonData.name
+      const game = gameConnections[gameId]
+      game['gameResponses'][name] = {response: question, score: 0}
+    }
+  })
+
+  socket.on('openOpinions', (gameId) => {
+    io.emit('openClientOpinions', gameId)
+  })
+
+  socket.on('timeUp', (gameId) => {
+    io.emit('timesUp', gameId)
   })
 })
 
