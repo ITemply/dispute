@@ -13,6 +13,7 @@ body {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    border-bottom: 3px black solid;
 }
 
 .button-border {
@@ -340,4 +341,24 @@ body {
 
 .response-input:active {
     background-color: rgb(67, 67, 67);
+}
+
+.side-panel-r {
+    height: 100%;
+    top: 0%;
+    left: 0%;
+    position: fixed;
+    background-color: rgb(25, 25, 25, 1);
+    width: 50%;
+    border-right: solid black 3px;
+}
+
+.side-panel-l {
+    height: 100%;
+    top: 0%;
+    right: 0%;
+    position: fixed;
+    background-color: rgb(25, 25, 25, 1);
+    width: 50%;
+    border-left: solid black 3px;
 }

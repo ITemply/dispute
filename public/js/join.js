@@ -37,6 +37,20 @@ function logError(errorText) {
     }
 }
 
+function openPanels() {
+    document.getElementById('panel-r').style = 'transform: translateX(-100%); transition: transform 1.75s ease-in-out;'
+    document.getElementById('panel-l').style = 'transform: translateX(100%); transition: transform 1.75s ease-in-out;'
+}
+
+function closePanels() {
+    document.getElementById('panel-r').style = 'transform: translateX(0%); transition: transform 1.75s ease-in-out;'
+    document.getElementById('panel-l').style = 'transform: translateX(0%); transition: transform 1.75s ease-in-out;'
+}
+
+setTimeout(function() {
+    openPanels()
+}, 1000)
+
 socket.on('joinCodeCheck', (codeData) => {
     const jsonData = JSON.parse(codeData)
     var status = jsonData.status
@@ -135,7 +149,23 @@ socket.on('stopVotes', (gameId) => {
     if (joinCode == gameId) {
         document.getElementById('name-enter').style = 'transform: translateY(0%); transition: transform 1.75s ease-in-out;'
         setTimeout(function() {
+            closePanels()
+        }, 2500)
+        setTimeout(function() {
             document.getElementById('user-section').innerHTML = '<div class="name-border"><span>You\'re still in! The game host will start the next match soon.</span></div>'
+        }, 3000)
+    }
+})
+
+socket.on('announceWinner', (winnerData) => {
+    const jsonData = JSON.parse(winnerData)
+    var winnerName = jsonData.winnerName
+    var winNumber = jsonData.winNumber
+    var gameId = jsonData.id
+    if (joinCode == gameId) {
+        setTimeout(function() {
+            document.getElementById('headTitle').innerHTML = 'Winner: ' + winnerName + ' Votes: ' + winNumber
+            openPanels()
         }, 3000)
     }
 })

@@ -12,6 +12,20 @@ function startHost() {
     }
 }
 
+function openPanels() {
+    document.getElementById('panel-r').style = 'transform: translateX(-100%); transition: transform 1.75s ease-in-out;'
+    document.getElementById('panel-l').style = 'transform: translateX(100%); transition: transform 1.75s ease-in-out;'
+}
+
+function closePanels() {
+    document.getElementById('panel-r').style = 'transform: translateX(0%); transition: transform 1.75s ease-in-out;'
+    document.getElementById('panel-l').style = 'transform: translateX(0%); transition: transform 1.75s ease-in-out;'
+}
+
+setTimeout(function() {
+    openPanels()
+}, 1000)
+
 socket.on('gameCreated', (gameDetails) => {
     const jsonData = JSON.parse(gameDetails)
     joinCode = jsonData.gameId
@@ -81,8 +95,11 @@ socket.on('updateQuestion', (questionData) => {
                             document.getElementById('host-text').innerHTML = 'Vote on the Best | ' + timeRemaining
                             if (timeRemaining == 0) {
                                 clearInterval(timer2)
-                                socket.emit('stopVoting', gameId)
                                 document.getElementById('host-text').innerHTML = 'Processing Votes'
+                                setTimeout(function() {
+                                    closePanels()
+                                    socket.emit('stopVoting', gameId)
+                                }, 2500)
                             }
                         }, 1000)
                       //  document.getElementById('name-enter').style = 'transform: translateY(-100%); transition: transform 1.75s ease-in-out;'
@@ -91,5 +108,18 @@ socket.on('updateQuestion', (questionData) => {
                 }
             }, 1000)
         }, 5500)
+    }
+})
+
+socket.on('announceWinner', (winnerData) => {
+    const jsonData = JSON.parse(winnerData)
+    var winnerName = jsonData.winnerName
+    var winNumber = jsonData.winNumber
+    var gameId = jsonData.id
+    if (joinCode == gameId) {
+        setTimeout(function() {
+            document.getElementById('host-text').innerHTML = 'Winner: ' + winnerName + ' Votes: ' + winNumber
+            openPanels()
+        }, 3000)
     }
 })
