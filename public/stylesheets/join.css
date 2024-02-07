@@ -309,3 +309,53 @@ body {
     font-weight: 700;
     outline: none;
 }
+
+.response {
+    width: 850px;
+    height: 60px;
+    padding: 5px;
+    border: 3px black solid;
+    background-color: rgb(37, 37, 37);
+    color: white;
+    font-size: 17.5px;
+    font-family: Arial;
+    font-weight: 700;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    flex-direction: row;
+    text-align: center;
+}
+
+.response-text {
+    width: 700px;
+    height: 30px;
+    padding: 5px;
+    background-color: rgb(50, 50, 50);
+    font-size: 25px;
+    font-family: Arial;
+    font-weight: 700;
+}
+
+.response-input {
+    width: 100px;
+    height: 40px;
+    padding: 5px;
+    background-color: rgb(50, 50, 50);
+    display: block;
+    color: white;
+    border: none;
+    text-align: center;
+    font-size: 17.5px;
+    font-family: Arial;
+    font-weight: 700;
+    outline: none;
+}
+
+.response-input:hover {
+    background-color: rgb(47, 47, 47);
+}
+
+.response-input:active {
+    background-color: rgb(67, 67, 67);
+}

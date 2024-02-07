@@ -1,12 +1,10 @@
 const express = require('express')
 const path = require('node:path')
 const bodyParser = require('body-parser');
-const request = require('request')
-const crypto = require('crypto')
 const app = express()
 const server = require('http').createServer(app);
 const io = require('socket.io')(server);
-const dotenv = require('dotenv')
+const dotenv = require('dotenv');
 dotenv.config()
 
 app.set('views', path.join(__dirname, 'public'))
@@ -28,6 +26,24 @@ function makeid(length) {
     counter += 1
   }
   return result
+}
+
+function indexOfMax(arr) {
+  if (arr.length === 0) {
+      return -1;
+  }
+
+  var max = arr[0];
+  var maxIndex = 0;
+
+  for (var i = 1; i < arr.length; i++) {
+      if (arr[i] > max) {
+          maxIndex = i;
+          max = arr[i];
+      }
+  }
+
+  return maxIndex;
 }
 
 app.get('/', (req, res) => {
@@ -60,7 +76,7 @@ io.on('connection', (socket) => {
       gameId = makeid(6)
     }
     validJoinCodes.push(gameId)
-    gameConnections[gameId] = {"gameConnections": [], "gameResponses": {}, "gameWins": {},"gameStatus": "Awaiting", "gameQuestion": "None"}
+    gameConnections[gameId] = {"gameConnections": [], "gameResponses": {},"gameStatus": "Awaiting", "gameQuestion": "None"}
     socket.emit('gameCreated', '{"gameId": "' + gameId + '"}')
   })
 
@@ -102,7 +118,7 @@ io.on('connection', (socket) => {
     } else if (game['gameStatus'] == 'Responding') {
       var name = jsonData.name
       const game = gameConnections[gameId]
-      game['gameResponses'][name] = {response: question, score: 0}
+      game['gameResponses'][name] = {'response': question, 'score': 0, 'name': name}
     }
   })
 
@@ -112,6 +128,34 @@ io.on('connection', (socket) => {
 
   socket.on('timeUp', (gameId) => {
     io.emit('timesUp', gameId)
+  })
+
+  socket.on('gatherResponses', (gameId) => {
+    const game = gameConnections[gameId]
+    io.emit('sendResponses', JSON.stringify({id: gameId, responses: game['gameResponses']}))
+  })
+
+  socket.on('sendVote', (voteData) => {
+    const jsonData = JSON.parse(voteData)
+    var gameId = jsonData.id
+    var voteName = jsonData.name
+    const game = gameConnections[gameId]
+    game['gameResponses'][voteName]['score'] = game['gameResponses'][voteName]['score'] + 1
+  })
+
+  socket.on('stopVoting', (gameId) => {
+    io.emit('stopVotes', gameId)
+    const game = gameConnections[gameId]
+    var scores = {'count': [], 'names': []}
+    for (let key in game['gameResponses']) {
+      var value = game['gameResponses'][key]
+      scores['count'].push(value['score'])
+      scores['names'].push(value['name'])
+    }
+    var max = indexOfMax(scores['count'])
+    var winnerName = scores['names'][max]
+    var winNumber = scores['count'][max]
+    io.emit('announceWinner', JSON.stringify({winnerName: winnerName, winNumber: winNumber, id: gameId}))
   })
 })
 

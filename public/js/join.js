@@ -2,6 +2,7 @@ const socket = io()
 
 var joinCode = ''
 var name = ''
+var voted = false
 
 function sendJoinCode() {
     const code = document.getElementById('code')
@@ -58,6 +59,7 @@ socket.on('gameStart', (startData) => {
         document.getElementById('name-enter').style = 'transform: translateY(0%); transition: transform 1.75s ease-in-out;'
         document.getElementById('binding').style = 'width: 85%;'
     }
+    voted = false
 })
 
 socket.on('writerSelected', (writerData) => {
@@ -65,7 +67,7 @@ socket.on('writerSelected', (writerData) => {
     var gameId = jsonData.id
     var wname = jsonData.name
     if (joinCode == gameId) {
-        document.getElementById('headTitle').innerHTML = name + ' is the Writer'
+        document.getElementById('headTitle').innerHTML = wname + ' is the Writer'
         if (wname == name) {
             document.getElementById('enter-bar').style = 'transform: translateY(-100%); transition: transform 1.75s ease-in-out;'
         }
@@ -103,6 +105,37 @@ socket.on('timesUp', (gameId) => {
         document.getElementById('opinion').value = ''
         setTimeout(function() {
             document.getElementById('name-enter').style = 'transform: translateY(-100%); transition: transform 1.75s ease-in-out;'
+        }, 3000)
+    }
+})
+
+socket.on('sendResponses', (responseData) => {
+    const jsonData = JSON.parse(responseData)
+    var gameId = jsonData.id
+    var responses = jsonData.responses
+    if (gameId == joinCode) {
+        document.getElementById('user-section').innerHTML = ''
+        for (let key in responses) {
+            var value = responses[key]
+            document.getElementById('user-section').innerHTML = document.getElementById('user-section').innerHTML + '<div class="response"><span class="response-text">'+value['response']+'</span> <input class="response-input" type="button" value="Vote" onclick="voteResponse(\''+value['name']+'\')"></div>'
+        }
+    }
+})
+
+function voteResponse(vname) {
+    if (voted == false) {
+        voted = true
+        socket.emit('sendVote', JSON.stringify({'id': joinCode, 'name': vname}))
+        document.getElementById('headTitle').innerHTML = 'Your Vote is In'
+        document.getElementById('name-enter').style = 'transform: translateY(0%); transition: transform 1.75s ease-in-out;'
+    }
+}
+
+socket.on('stopVotes', (gameId) => {
+    if (joinCode == gameId) {
+        document.getElementById('name-enter').style = 'transform: translateY(0%); transition: transform 1.75s ease-in-out;'
+        setTimeout(function() {
+            document.getElementById('user-section').innerHTML = '<div class="name-border"><span>You\'re still in! The game host will start the next match soon.</span></div>'
         }, 3000)
     }
 })

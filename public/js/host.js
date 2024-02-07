@@ -72,8 +72,20 @@ socket.on('updateQuestion', (questionData) => {
                     document.getElementById('join-code').style.display = 'none'
                     var usec = document.getElementById('user-section')
                     usec.innerHTML = ''
+                    socket.emit('gatherResponses', gameId)
                     setTimeout(function() {
-                        document.getElementById('name-enter').style = 'transform: translateY(-100%); transition: transform 1.75s ease-in-out;'
+                        document.getElementById('host-text').innerHTML = 'Vote on the Best | 30'
+                        timeRemaining = 30
+                        var timer2 = setInterval(function() {
+                            timeRemaining = timeRemaining - 1
+                            document.getElementById('host-text').innerHTML = 'Vote on the Best | ' + timeRemaining
+                            if (timeRemaining == 0) {
+                                clearInterval(timer2)
+                                socket.emit('stopVoting', gameId)
+                                document.getElementById('host-text').innerHTML = 'Processing Votes'
+                            }
+                        }, 1000)
+                      //  document.getElementById('name-enter').style = 'transform: translateY(-100%); transition: transform 1.75s ease-in-out;'
                     }, 3000)
                     socket.emit('timeUp', joinCode)
                 }
