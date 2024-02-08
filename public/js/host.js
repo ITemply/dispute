@@ -41,6 +41,7 @@ socket.on('gameCreated', (gameDetails) => {
         document.getElementById('host-text').innerHTML = 'Game Id Obtained'
         document.getElementById('name-enter').classList.add('move-start-game')
         document.getElementById('join-code').innerHTML = joinCode
+        document.getElementById('bottom-text').style.display = 'none'
     }, 1000)
 })
 

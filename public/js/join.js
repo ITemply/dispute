@@ -80,6 +80,7 @@ socket.on('gameStart', (startData) => {
     if (sgameId == joinCode) {
         document.getElementById('name-enter').style = 'transform: translateY(0%); transition: transform 1.75s ease-in-out;'
         document.getElementById('binding').style = 'width: 85%;'
+        document.getElementById('bottom-text').style.display = 'none'
     }
     voted = false
 })
