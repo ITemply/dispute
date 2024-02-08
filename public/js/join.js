@@ -1,5 +1,13 @@
 const socket = io()
 
+socket.on('disconnect', function(){
+    alert('disconnect')
+})
+
+socket.on('connect', function() {
+    alert('connect')
+})
+
 var joinCode = ''
 var name = ''
 var voted = false
