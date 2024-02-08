@@ -5,7 +5,7 @@ socket.on('disconnect', function(){
 })
 
 socket.on('connect', function() {
-    alert('connect')
+    console.log('Client Connected')
 })
 
 var currentGame = false
@@ -91,9 +91,6 @@ socket.on('updateQuestion', (questionData) => {
                 document.getElementById('host-text').innerHTML = 'Write Your Response | ' + timeRemaining
                 if (timeRemaining == 0) {
                     clearInterval(timer)
-                    document.getElementById('join-code').style.display = 'none'
-                    var usec = document.getElementById('user-section')
-                    usec.innerHTML = ''
                     socket.emit('gatherResponses', gameId)
                     setTimeout(function() {
                         document.getElementById('host-text').innerHTML = 'Vote on the Best | 30'
@@ -122,11 +119,29 @@ socket.on('announceWinner', (winnerData) => {
     const jsonData = JSON.parse(winnerData)
     var winnerName = jsonData.winnerName
     var winNumber = jsonData.winNumber
+    var winText = jsonData.winText
     var gameId = jsonData.id
     if (joinCode == gameId) {
         setTimeout(function() {
-            document.getElementById('host-text').innerHTML = 'Winner: ' + winnerName + ' Votes: ' + winNumber
+            document.getElementById('host-text').innerHTML = 'Winning Opinion: ' + winText + ' Writer: '+winnerName+' Votes: ' + winNumber
             openPanels()
+            setTimeout(function() {
+                document.getElementById('enter-bar').style = 'transform: translateY(-100%); transition: transform 1.75s ease-in-out;'
+            }, 5000)
         }, 3000)
     }
 })
+
+function continueToMenu(){
+    socket.emit('menuing', joinCode)
+    document.getElementById('name-enter').style = 'transform: translateY(-100%); transition: transform 1.75s ease-in-out;'
+    document.getElementById('enter-bar').style = 'transform: translateY(100%); transition: transform 1.75s ease-in-out;'
+    document.getElementById('btn-end').style.display = 'flex'
+    document.getElementById('host').value = 'Next Round'
+}
+
+function endGame() {
+    socket.emit('endGame', joinCode)
+    document.getElementById('name-enter').style = 'transform: translateY(0%); transition: transform 1.75s ease-in-out;'
+    document.getElementById('host-text').innerHTML = 'Game Ended'
+}

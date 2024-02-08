@@ -5,7 +5,7 @@ socket.on('disconnect', function(){
 })
 
 socket.on('connect', function() {
-    alert('connect')
+    console.log('Client Connected')
 })
 
 var joinCode = ''
@@ -156,9 +156,7 @@ function voteResponse(vname) {
 socket.on('stopVotes', (gameId) => {
     if (joinCode == gameId) {
         document.getElementById('name-enter').style = 'transform: translateY(0%); transition: transform 1.75s ease-in-out;'
-        setTimeout(function() {
-            closePanels()
-        }, 2500)
+        closePanels()
         setTimeout(function() {
             document.getElementById('user-section').innerHTML = '<div class="name-border"><span>You\'re still in! The game host will start the next match soon.</span></div>'
         }, 3000)
@@ -169,11 +167,28 @@ socket.on('announceWinner', (winnerData) => {
     const jsonData = JSON.parse(winnerData)
     var winnerName = jsonData.winnerName
     var winNumber = jsonData.winNumber
+    var winText = jsonData.winText
     var gameId = jsonData.id
     if (joinCode == gameId) {
         setTimeout(function() {
-            document.getElementById('headTitle').innerHTML = 'Winner: ' + winnerName + ' Votes: ' + winNumber
+            document.getElementById('headTitle').innerHTML = 'Winning Opinion: ' + winText + ' Writer: '+winnerName+' Votes: ' + winNumber
             openPanels()
         }, 3000)
+    }
+})
+
+socket.on('menu', function(gameId){
+    if (joinCode == gameId) {
+        document.getElementById('name-enter').style = 'transform: translateY(-100%); transition: transform 1.75s ease-in-out;'
+        setTimeout(function() {
+            document.getElementById('headTitle').innerHTML = 'Game Starting Soon'
+        }, 2000)
+    }
+})
+
+socket.on('endGameHost', function(gameId){
+    if (joinCode == gameId) {
+        document.getElementById('name-enter').style = 'transform: translateY(0%); transition: transform 1.75s ease-in-out;'
+        document.getElementById('headTitle').innerHTML = 'Game Ended'
     }
 })

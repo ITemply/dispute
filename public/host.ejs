@@ -20,15 +20,16 @@
             <div class='button-border'>
                 <input class='text-input' type="button" value="Start Game" id="host" onclick="startGame()"> 
             </div>
+            <div class="button-border-h" id="btn-end">
+                <input class='text-input' type="button" value="End Game" id="end" onclick="endGame()"> 
+            </div>
         </div>
     </div>
     <div class="name-enter" id="name-enter">
         <div class="binding" id="binding">
             <span class="head-text" id="host-text">Host a Game</span>
             <div class='button-border' id='m-button'>
-                <input class='text-input' type="button" value="Start Hosting" id="host" onclick='startHost()'> 
-                <input class='text-input' type="button" value="End Game" id="end" onclick='endGame()' hidden>
-                <input class='text-input' type="button" value="Next Round" id="round" onclick='nextRound()' hidden>
+                <input class='text-input' type="button" value="Start Hosting" id="host1" onclick='startHost()'> 
             </div>
             <span class='error-text'>Error Class</span>
         </div>

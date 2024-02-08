@@ -155,7 +155,21 @@ io.on('connection', (socket) => {
     var max = indexOfMax(scores['count'])
     var winnerName = scores['names'][max]
     var winNumber = scores['count'][max]
-    io.emit('announceWinner', JSON.stringify({winnerName: winnerName, winNumber: winNumber, id: gameId}))
+    game['gameStatus'] = 'Ending'
+    var winText = game['gameResponses'][winnerName]['response']
+    io.emit('announceWinner', JSON.stringify({winnerName: winnerName, winNumber: winNumber, id: gameId, winText: winText}))
+  })
+
+  socket.on('menuing', (gameId) => {
+    const game = gameConnections[gameId]
+    game['gameResponses'] = {}
+    game['gameStatus'] = 'Awaiting'
+    io.emit('menu', gameId)
+  })
+
+  socket.on('endGame', (gameId) => {
+    io.emit('endGameHost', gameId)
+    delete gameConnections[gameId]
   })
 })
 

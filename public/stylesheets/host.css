@@ -28,6 +28,18 @@ body {
     border-color: black;
 }
 
+.button-border-h {
+    width: 250px;
+    height: 55px;
+    background-color: rgb(37, 37, 37);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    border: solid 3px;
+    border-color: black;
+}
+
 .name-border {
     width: 250px;
     height: 55px;
@@ -184,11 +196,12 @@ body {
     height: 125px;
     background-color: rgb(37, 37, 37);
     display: flex;
-    justify-content: space-evenly;
+    justify-content: center;
     align-items: center;
-    flex-direction: column;
+    flex-direction: row;
     border-top: solid 3px;
     border-color: black;
+    gap: 10px
 }
 
 .top-text {
@@ -263,7 +276,7 @@ body {
     background-color: rgb(57, 57, 57);
     border: none;
     height: 35px;
-    width: 75px;
+    width: 200px;
     text-align: center;
     color: white;
     font-size: 17.5px;
