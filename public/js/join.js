@@ -1,7 +1,7 @@
-const socket = io()
+var socket = io()
 
 socket.on('disconnect', function(){
-    alert('disconnect')
+    socket = io()
 })
 
 socket.on('connect', function() {
