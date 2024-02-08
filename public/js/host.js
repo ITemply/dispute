@@ -1,5 +1,13 @@
 const socket = io()
 
+socket.on('disconnect', function(){
+    alert('disconnect')
+})
+
+socket.on('connect', function() {
+    alert('connect')
+})
+
 var currentGame = false
 var joinCode = ''
 
@@ -102,7 +110,6 @@ socket.on('updateQuestion', (questionData) => {
                                 }, 2500)
                             }
                         }, 1000)
-                      //  document.getElementById('name-enter').style = 'transform: translateY(-100%); transition: transform 1.75s ease-in-out;'
                     }, 3000)
                     socket.emit('timeUp', joinCode)
                 }
